@@ -54,12 +54,18 @@ export class Dashboard implements OnInit {
 
   // ─── 3. CHART.JS LOGIC ─────────────────────────────────────
   renderChart() {
-    if (this.chart) this.chart.destroy(); // Destroy previous chart if it exists
-    if (!this.chartCanvas) return;
+    // 1. Safety check: Ensure the view has initialized the canvas
+    if (!this.chartCanvas || !this.chartCanvas.nativeElement) {
+      return;
+    }
+
+    if (this.chart) this.chart.destroy();
 
     const justifiees = this.totalAbsences() - this.absencesNonJustifiees();
     const nonJustifiees = this.absencesNonJustifiees();
 
+    // 2. Wrap in requestAnimationFrame or keep the setTimeout
+    // to ensure DOM is ready for Chart.js in Zoneless mode
     this.chart = new Chart(this.chartCanvas.nativeElement, {
       type: 'doughnut',
       data: {

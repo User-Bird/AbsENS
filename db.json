@@ -24,7 +24,7 @@
       "email": "alaoui@ens.ma",
       "password": "123456",
       "role": "enseignant",
-      "filiereId": 1
+      "filiereId": "1"
     },
     {
       "id": "4",

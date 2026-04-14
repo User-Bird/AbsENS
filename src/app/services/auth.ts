@@ -26,35 +26,28 @@ export class AuthService {
    */
   async login(email: string, password: string): Promise<boolean> {
     try {
-      // 1. Sanitize the email to ensure matching with db.json case-sensitivity
       const sanitizedEmail = email.toLowerCase().trim();
-
-      // 2. Safely encode the parameters for the URL
       const url = `${this.API}/users?email=${encodeURIComponent(sanitizedEmail)}&password=${encodeURIComponent(password)}`;
 
-      // 3. Convert Observable to Promise to keep it tracked in Zoneless mode
       const users = await firstValueFrom(this.http.get<User[]>(url));
 
-      if (!users || users.length === 0) {
-        return false;
-      }
+      if (!users || users.length === 0) return false;
 
       const user = users[0];
       const fakeToken = btoa(`${user.id}:${user.email}:${Date.now()}`);
 
-      // 4. Persist session
       localStorage.setItem('token', fakeToken);
       localStorage.setItem('currentUser', JSON.stringify(user));
 
-      // 5. Update Signal - this triggers UI updates in Zoneless mode
+      // Update state FIRST
       this._authState.set({ user, token: fakeToken, isAuthenticated: true });
 
-      // 6. Navigate and wait for it to complete
-      await this.router.navigate(['/dashboard']);
-      return true;
+      // Wait for navigation to complete
+      const navOk = await this.router.navigate(['/dashboard']);
+      return navOk;
 
     } catch (error) {
-      console.error('Critical Login Error:', error);
+      console.error('Login error', error);
       return false;
     }
   }
