@@ -29,7 +29,17 @@ export class FiliereList implements OnInit {
 
   onSubmit(): void {
     if (!this.newFiliere.nom || !this.newFiliere.code) return;
-    this.filiereService.create({ ...this.newFiliere });
+
+    // Calculate the next ID numerically to bypass json-server's weird UUIDs
+    const currentFilieres = this.filiereService.filieres();
+    const maxId = currentFilieres.length > 0
+      ? Math.max(...currentFilieres.map(f => Number(f.id) || 0))
+      : 0;
+
+    const payload = { ...this.newFiliere, id: (maxId + 1).toString() };
+
+    this.filiereService.create(payload as any);
+
     // Reset form
     this.newFiliere = { nom: '', code: '', cycle: 'licence' };
   }
