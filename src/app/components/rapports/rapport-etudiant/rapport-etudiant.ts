@@ -18,34 +18,32 @@ export class RapportEtudiant implements OnInit {
   absenceService = inject(AbsenceService);
   seanceService = inject(SeanceService);
 
-  etudiantId = signal<number>(0);
+  etudiantId = signal<string>(''); // Changed to string
   currentDate = new Date();
 
   ngOnInit(): void {
-    // 1. Grab the ID from the URL
     this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      this.etudiantId.set(id);
+      // Keep it as a string to match json-server safely
+      this.etudiantId.set(params.get('id') || '');
     });
 
-    // 2. Ensure our data is loaded
     this.etudiantService.loadAll();
     this.absenceService.loadAll();
     this.seanceService.loadAll();
   }
 
-  // ─── COMPUTED SIGNALS ──────────────────────────────────────
+  // ─── SAFE COMPUTED SIGNALS ─────────────────────────────────
 
   etudiant = computed(() => {
-    return this.etudiantService.etudiants().find(e => e.id === this.etudiantId());
+    // Force string comparison!
+    return this.etudiantService.etudiants().find(e => String(e.id) === this.etudiantId());
   });
 
   absences = computed(() => {
-    const etuId = this.etudiantId();
     return this.absenceService.absences()
-      .filter(a => a.etudiantId === etuId)
+      .filter(a => String(a.etudiantId) === this.etudiantId()) // Force string comparison
       .map(a => {
-        const seance = this.seanceService.seances().find(s => s.id === a.seanceId);
+        const seance = this.seanceService.seances().find(s => String(s.id) === String(a.seanceId));
         return { ...a, seance };
       });
   });
@@ -58,7 +56,6 @@ export class RapportEtudiant implements OnInit {
     };
   });
 
-  // ─── PRINT METHOD ──────────────────────────────────────────
   imprimer(): void {
     window.print();
   }

@@ -15,10 +15,25 @@ export class Login {
   password = signal('');
   loading  = signal(false);
 
-  onSubmit(): void {
-    if (!this.email() || !this.password()) return;
+  // ⬅️ REWRITE TO USE ASYNC/AWAIT
+  async onSubmit(): Promise<void> {
+    const mail = this.email().trim();
+    const pass = this.password().trim();
+
+    if (!mail || !pass) return;
+
+    // Trigger loading UI
     this.loading.set(true);
-    this.auth.login(this.email(), this.password());
-    setTimeout(() => this.loading.set(false), 2000);
+
+    // Wait for the login logic and routing to finish
+    const success = await this.auth.login(mail, pass);
+
+    // Disable loading UI
+    this.loading.set(false);
+
+    // Trigger alert only if it failed
+    if (!success) {
+      alert('Email ou mot de passe incorrect');
+    }
   }
 }

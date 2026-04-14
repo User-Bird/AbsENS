@@ -80,6 +80,12 @@
       "code": "ANG",
       "cycle": "licence",
       "description": "Langue anglaise"
+    },
+    {
+      "nom": "mathematique",
+      "code": "Math",
+      "cycle": "licence",
+      "id": "ecDzSf2Bclc"
     }
   ],
   "semestres": [

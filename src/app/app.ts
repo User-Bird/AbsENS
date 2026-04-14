@@ -8,19 +8,21 @@ import { AuthService } from './services/auth';
   selector: 'app-root',
   imports: [RouterOutlet, Header, Sidebar],
   template: `
-    @if (auth.isAuthenticated()) {
-      <div class="app-layout">
+    <div class="app-layout">
+      @if (auth.isAuthenticated()) {
         <app-sidebar class="sidebar"></app-sidebar>
-        <div class="main-content">
+      }
+
+      <div class="main-content">
+        @if (auth.isAuthenticated()) {
           <app-header></app-header>
-          <main class="content-wrapper">
-            <router-outlet />
-          </main>
-        </div>
+        }
+
+        <main class="content-wrapper" [style.padding]="auth.isAuthenticated() ? '1.5rem' : '0'">
+          <router-outlet />
+        </main>
       </div>
-    } @else {
-      <router-outlet />
-    }
+    </div>
   `,
   styles: [`
     .app-layout {
@@ -43,7 +45,6 @@ import { AuthService } from './services/auth';
     }
     .content-wrapper {
       flex: 1;
-      padding: 1.5rem;
       overflow-y: auto;
     }
   `]
