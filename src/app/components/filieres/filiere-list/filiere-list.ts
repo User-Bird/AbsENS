@@ -30,13 +30,22 @@ export class FiliereList implements OnInit {
   onSubmit(): void {
     if (!this.newFiliere.nom || !this.newFiliere.code) return;
 
-    // Calculate the next ID numerically to bypass json-server's weird UUIDs
     const currentFilieres = this.filiereService.filieres();
-    const maxId = currentFilieres.length > 0
-      ? Math.max(...currentFilieres.map(f => Number(f.id) || 0))
-      : 0;
 
-    const payload = { ...this.newFiliere, id: (maxId + 1).toString() };
+    // 1. Calculate the max ID correctly
+    // We filter out any non-numeric IDs just in case
+    const ids = currentFilieres
+      .map(f => Number(f.id))
+      .filter(id => !isNaN(id));
+
+    const maxId = ids.length > 0 ? Math.max(...ids) : 0;
+
+    // 2. IMPORTANT: Remove .toString()
+    // Send the ID as a pure number to the service
+    const payload = {
+      ...this.newFiliere,
+      id: maxId + 1
+    };
 
     this.filiereService.create(payload as any);
 
