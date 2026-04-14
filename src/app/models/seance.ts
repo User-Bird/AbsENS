@@ -1,10 +1,12 @@
+
+import { TypeSeance } from './module';   // ← add this line
+
 export interface Seance {
   id: number;
   moduleId: number;
-  date: string;        // "2026-04-01"
-  creneau: string;     // "08:00-10:00"
+  date: string;
+  creneau: string;
   type: TypeSeance;
   salle?: string;
   effectuee: boolean;
 }
-
