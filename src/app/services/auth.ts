@@ -2,7 +2,7 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { User, AuthState } from '../models/user';
-import { firstValueFrom } from 'rxjs'; // 1.ADD THIS IMPORT
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -21,34 +21,40 @@ export class AuthService {
   readonly isAdmin = computed(() => this._authState().user?.role === 'admin');
   readonly isEnseignant = computed(() => this._authState().user?.role === 'enseignant');
 
-  // 2. REWRITE AS ASYNC/AWAIT
+  /**
+   * Async login compatible with Zoneless Change Detection
+   */
   async login(email: string, password: string): Promise<boolean> {
     try {
-      // Safely encode the parameters so json-server doesn't break on the '@' symbol
-      const url = `${this.API}/users?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+      // 1. Sanitize the email to ensure matching with db.json case-sensitivity
+      const sanitizedEmail = email.toLowerCase().trim();
 
-      // firstValueFrom converts the Observable to a tracked Promise
+      // 2. Safely encode the parameters for the URL
+      const url = `${this.API}/users?email=${encodeURIComponent(sanitizedEmail)}&password=${encodeURIComponent(password)}`;
+
+      // 3. Convert Observable to Promise to keep it tracked in Zoneless mode
       const users = await firstValueFrom(this.http.get<User[]>(url));
 
       if (!users || users.length === 0) {
-        return false; // Login failed
+        return false;
       }
 
       const user = users[0];
       const fakeToken = btoa(`${user.id}:${user.email}:${Date.now()}`);
 
+      // 4. Persist session
       localStorage.setItem('token', fakeToken);
       localStorage.setItem('currentUser', JSON.stringify(user));
 
-      // This signal update forces the layout to know the user is authenticated
+      // 5. Update Signal - this triggers UI updates in Zoneless mode
       this._authState.set({ user, token: fakeToken, isAuthenticated: true });
 
-      // Await the router to ensure navigation fully completes before returning
+      // 6. Navigate and wait for it to complete
       await this.router.navigate(['/dashboard']);
-      return true; // Login success
+      return true;
 
     } catch (error) {
-      console.error('Login error', error);
+      console.error('Critical Login Error:', error);
       return false;
     }
   }
@@ -62,6 +68,10 @@ export class AuthService {
 
   private loadFromStorage(): User | null {
     const raw = localStorage.getItem('currentUser');
-    return raw ? JSON.parse(raw) : null;
+    try {
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
   }
 }
