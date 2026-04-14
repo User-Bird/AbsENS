@@ -19,8 +19,8 @@ export class SaisieAbsence implements OnInit {
 
   selectedSeanceId = signal<number | ''>('');
 
-  // We use a Set to keep track of which student IDs have been checked
-  absentStudentIds = new Set<number>();
+  //Signal containing the Set of absent student IDs
+  absents = signal<Set<number>>(new Set());
 
   ngOnInit(): void {
     this.seanceService.loadAll();
@@ -29,11 +29,11 @@ export class SaisieAbsence implements OnInit {
 
   toggleAbsence(etudiantId: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
-    if (isChecked) {
-      this.absentStudentIds.add(etudiantId);
-    } else {
-      this.absentStudentIds.delete(etudiantId);
-    }
+    this.absents.update(set => {
+      const newSet = new Set(set);
+      isChecked ? newSet.add(etudiantId) : newSet.delete(etudiantId);
+      return newSet;
+    });
   }
 
   onSubmit(): void {
@@ -42,14 +42,14 @@ export class SaisieAbsence implements OnInit {
       return;
     }
 
-    // Convert the Set to an array and send it to the service
+    //Read from the signal using this.absents()
     this.absenceService.enregistrerAbsences(
       Number(this.selectedSeanceId()),
-      Array.from(this.absentStudentIds)
+      Array.from(this.absents())
     );
 
-    // Clear checkboxes after submission
-    this.absentStudentIds.clear();
+    //Reset the signal to a new empty Set
+    this.absents.set(new Set());
     this.selectedSeanceId.set('');
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { User, AuthState } from '../models/user';
 
@@ -25,7 +25,8 @@ export class AuthService {
 
   // ── Login ──────────────────────────────────────────────────────────────
   login(email: string, password: string): void {
-    this.http.get<User[]>(`${this.API}/users?email=${email}&password=${password}`)
+    const params = new HttpParams().set('email', email).set('password', password);
+    this.http.get<User[]>(`${this.API}/users`, { params })
       .subscribe({
         next: (users) => {
           if (users.length === 0) {

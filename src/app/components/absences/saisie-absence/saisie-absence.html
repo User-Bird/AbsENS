@@ -20,10 +20,10 @@
         </div>
 
         <div class="summary-box">
-          <p>Étudiants marqués absents: <strong>{{ absentStudentIds.size }}</strong></p>
+          <p>Étudiants marqués absents: <strong>{{ absents().size }}</strong></p>
         </div>
 
-        <button type="submit" class="btn btn-primary" [disabled]="!selectedSeanceId() || absentStudentIds.size === 0">
+        <button type="submit" class="btn btn-primary" [disabled]="!selectedSeanceId() || absents().size === 0">
           Enregistrer les absences
         </button>
       </form>
@@ -47,7 +47,7 @@
                 <input
                   type="checkbox"
                   class="absence-checkbox"
-                  [checked]="absentStudentIds.has(etudiant.id)"
+                  [checked]="absents().has(etudiant.id)"
                   (change)="toggleAbsence(etudiant.id, $event)"
                 >
               </td>

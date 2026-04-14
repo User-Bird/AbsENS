@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router'; // Add this at the top
 @Component({
   selector: 'app-etudiant-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule], // Add RouterModule here
+  imports: [CommonModule, FormsModule, RouterModule], // ← add RouterModule
   templateUrl: './etudiant-list.html',
   styleUrl: './etudiant-list.css'
 })
