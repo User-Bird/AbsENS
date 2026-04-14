@@ -1,0 +1,37 @@
+.page-container { padding: 1rem; }
+.header-section { margin-bottom: 2rem; }
+.header-section h2 { color: #1a3a5c; margin: 0; }
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.card {
+  background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
+}
+
+.card h3 { margin-top: 0; margin-bottom: 1.5rem; color: #334155; font-size: 1.1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem; }
+
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: #475569; }
+.form-group select { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; }
+
+.summary-box { background: #f8fafc; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px dashed #cbd5e1; text-align: center; }
+.summary-box p { margin: 0; color: #334155; }
+.summary-box strong { color: #e11d48; font-size: 1.2rem; }
+
+.btn-primary { background: #1a3a5c; color: white; width: 100%; padding: 0.75rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.data-table th { background: #f8fafc; font-weight: 600; color: #475569; font-size: 0.9rem; }
+
+.absence-checkbox { width: 1.2rem; height: 1.2rem; cursor: pointer; accent-color: #e11d48; }
+
+.badge { padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+.badge-gray { background: #f1f5f9; color: #475569; font-family: monospace; }
+.badge-blue { background: #e0f2fe; color: #0284c7; }

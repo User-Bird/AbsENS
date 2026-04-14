@@ -1,1 +1,63 @@
-<p>saisie-absence works!</p>
+<div class="page-container">
+  <div class="header-section">
+    <h2>Saisie des Absences</h2>
+  </div>
+
+  <div class="content-grid">
+    <div class="card form-card">
+      <h3>Détails de la séance</h3>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Sélectionner la séance</label>
+          <select [ngModel]="selectedSeanceId()" (ngModelChange)="selectedSeanceId.set($event)" name="seance" required>
+            <option value="">-- Choisir une séance --</option>
+            @for (seance of seanceService.seances(); track seance.id) {
+              <option [value]="seance.id">
+                {{ seance.date }} | {{ seance.creneau }} | {{ seance.type }} (Salle: {{ seance.salle }})
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="summary-box">
+          <p>Étudiants marqués absents: <strong>{{ absentStudentIds.size }}</strong></p>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!selectedSeanceId() || absentStudentIds.size === 0">
+          Enregistrer les absences
+        </button>
+      </form>
+    </div>
+
+    <div class="card list-card">
+      <h3>Cocher les absents</h3>
+      <table class="data-table">
+        <thead>
+        <tr>
+          <th>Absent ?</th>
+          <th>CNE</th>
+          <th>Nom complet</th>
+          <th>Groupe</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (etudiant of etudiantService.etudiants(); track etudiant.id) {
+            <tr>
+              <td>
+                <input
+                  type="checkbox"
+                  class="absence-checkbox"
+                  [checked]="absentStudentIds.has(etudiant.id)"
+                  (change)="toggleAbsence(etudiant.id, $event)"
+                >
+              </td>
+              <td><span class="badge badge-gray">{{ etudiant.cne }}</span></td>
+              <td><strong>{{ etudiant.nom | uppercase }}</strong> {{ etudiant.prenom }}</td>
+              <td><span class="badge badge-blue">{{ etudiant.groupe }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

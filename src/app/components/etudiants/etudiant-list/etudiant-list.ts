@@ -1,14 +1,15 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; // 1. ADD THIS IMPORT
 import { EtudiantService } from '../../../services/etudiant';
 import { FiliereService } from '../../../services/filiere';
 import { SemestreService } from '../../../services/semestre';
+import { RouterModule } from '@angular/router'; // Add this at the top
 
 @Component({
   selector: 'app-etudiant-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule], // Add RouterModule here
   templateUrl: './etudiant-list.html',
   styleUrl: './etudiant-list.css'
 })

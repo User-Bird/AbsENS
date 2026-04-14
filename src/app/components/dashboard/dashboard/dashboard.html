@@ -1,1 +1,63 @@
-<p>dashboard works!</p>
+<div class="page-container">
+  <div class="header-section">
+    <h2>Tableau de Bord</h2>
+    <p class="subtitle">Aperçu général de l'assiduité à l'ENS Meknès</p>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon blue">🎓</div>
+      <div class="kpi-content">
+        <h3>Total Étudiants</h3>
+        <p class="kpi-value">{{ totalEtudiants() }}</p>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon purple">📅</div>
+      <div class="kpi-content">
+        <h3>Séances Enregistrées</h3>
+        <p class="kpi-value">{{ totalSeances() }}</p>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon orange">⚠️</div>
+      <div class="kpi-content">
+        <h3>Total Absences</h3>
+        <p class="kpi-value">{{ totalAbsences() }}</p>
+      </div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-icon red">🚨</div>
+      <div class="kpi-content">
+        <h3>Non Justifiées</h3>
+        <p class="kpi-value text-red">{{ absencesNonJustifiees() }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Répartition des Absences</h3>
+      <div class="chart-container">
+        <canvas #chartCanvas></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card info-card">
+      <h3>Résumé Rapide</h3>
+      <p>Ce tableau de bord se met à jour en temps réel grâce aux signaux Angular.</p>
+      <ul class="summary-list">
+        <li><strong>Taux de justification:</strong>
+          @if(totalAbsences() > 0) {
+            {{ ((totalAbsences() - absencesNonJustifiees()) / totalAbsences() * 100).toFixed(1) }}%
+          } @else {
+            0%
+          }
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

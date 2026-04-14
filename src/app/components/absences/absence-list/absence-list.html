@@ -1,1 +1,64 @@
-<p>absence-list works!</p>
+<div class="page-container">
+  <div class="header-section">
+    <h2>Historique des Absences</h2>
+  </div>
+
+  <div class="filters-card">
+    <div class="form-group inline">
+      <label>Statut de l'absence :</label>
+      <select [ngModel]="filterJustifiee()" (ngModelChange)="filterJustifiee.set($event)">
+        <option value="all">Toutes les absences</option>
+        <option value="yes">Justifiées uniquement</option>
+        <option value="no">Non justifiées uniquement</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card list-card">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>Date de Séance</th>
+        <th>Créneau</th>
+        <th>Étudiant (CNE)</th>
+        <th>Statut</th>
+        <th>Motif</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (item of absencesDetaillees(); track item.id) {
+          <tr>
+            <td><strong>{{ item.seance?.date }}</strong></td>
+            <td>{{ item.seance?.creneau }}</td>
+            <td>
+              {{ item.etudiant?.nom | uppercase }} {{ item.etudiant?.prenom }}
+              <br><small class="text-gray">{{ item.etudiant?.cne }}</small>
+            </td>
+            <td>
+              @if (item.justifiee) {
+                <span class="badge badge-green">Justifiée</span>
+              } @else {
+                <span class="badge badge-red">Non Justifiée</span>
+              }
+            </td>
+            <td>
+              <span class="text-gray">{{ item.motif || '-' }}</span>
+            </td>
+            <td>
+              @if (!item.justifiee) {
+                <button class="btn btn-sm btn-outline-primary" (click)="onJustifier(item.id)">
+                  Justifier
+                </button>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="text-center">Aucune absence trouvée.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

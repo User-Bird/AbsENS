@@ -1,0 +1,42 @@
+.page-container { padding: 1rem; max-width: 900px; margin: 0 auto; }
+.header-section { display: flex; justify-content: space-between; margin-bottom: 2rem; }
+
+.btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+.btn-primary { background: #1a3a5c; color: white; }
+.btn-secondary { background: #f1f5f9; color: #475569; }
+
+.report-card { background: white; padding: 3rem; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+.report-header { display: flex; justify-content: space-between; border-bottom: 2px solid #1a3a5c; padding-bottom: 1.5rem; margin-bottom: 2rem; }
+.school-info h2 { margin: 0; color: #1a3a5c; font-size: 1.2rem; }
+.school-info p { margin: 0.2rem 0 0 0; color: #64748b; font-size: 0.9rem; }
+.doc-title { text-align: right; }
+.doc-title h1 { margin: 0; color: #0f172a; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+.doc-title p { margin: 0.2rem 0 0 0; color: #64748b; font-size: 0.9rem; }
+
+.student-info { margin-bottom: 2rem; background: #f8fafc; padding: 1.5rem; border-radius: 8px; }
+.student-info h3 { margin-top: 0; color: #334155; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; color: #1e293b; }
+
+.stats-summary { display: flex; gap: 1.5rem; margin-bottom: 2rem; }
+.stat-box { flex: 1; border: 1px solid #e2e8f0; padding: 1rem; text-align: center; border-radius: 8px; }
+.stat-box .label { display: block; font-size: 0.9rem; color: #64748b; text-transform: uppercase; margin-bottom: 0.5rem; }
+.stat-box .value { display: block; font-size: 2rem; font-weight: 700; color: #1e293b; }
+.stat-box.warning { border-color: #fecaca; background: #fff5f5; }
+.stat-box.warning .value { color: #dc2626; }
+
+.absence-details h3 { color: #334155; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
+.data-table { width: 100%; border-collapse: collapse; margin-bottom: 3rem; }
+.data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+.data-table th { background: #f8fafc; font-weight: 600; color: #475569; }
+
+.signature-area { text-align: right; margin-top: 4rem; color: #1e293b; }
+.text-center { text-align: center; }
+
+/* ─── PRINT MAGIC ─── */
+@media print {
+  body { background: white; }
+  .no-print, app-sidebar, app-header { display: none !important; }
+  .report-card { border: none; box-shadow: none; padding: 0; }
+  .page-container { margin: 0; max-width: 100%; padding: 0; }
+}
