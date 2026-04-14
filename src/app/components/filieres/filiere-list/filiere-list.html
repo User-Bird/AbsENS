@@ -1,1 +1,70 @@
-<p>filiere-list works!</p>
+<div class="page-container">
+  <div class="header-section">
+    <h2>Gestion des Filières</h2>
+  </div>
+
+  <div class="content-grid">
+    <div class="card form-card">
+      <h3>Ajouter une Filière</h3>
+      <form (ngSubmit)="onSubmit()" #f="ngForm">
+        <div class="form-group">
+          <label>Nom de la filière</label>
+          <input type="text" [(ngModel)]="newFiliere.nom" name="nom" required placeholder="Ex: Informatique">
+        </div>
+
+        <div class="form-group">
+          <label>Code</label>
+          <input type="text" [(ngModel)]="newFiliere.code" name="code" required placeholder="Ex: INFO">
+        </div>
+
+        <div class="form-group">
+          <label>Cycle</label>
+          <select [(ngModel)]="newFiliere.cycle" name="cycle">
+            @for (c of cycles; track c) {
+              <option [value]="c">{{ c }}</option>
+            }
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="!f.valid">Ajouter</button>
+      </form>
+    </div>
+
+    <div class="card list-card">
+      <h3>Liste des Filières</h3>
+
+      @if (filiereService.loading()) {
+        <div class="loading">Chargement des données...</div>
+      } @else {
+        <table class="data-table">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Code</th>
+            <th>Nom</th>
+            <th>Cycle</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (filiere of filiereService.filieres(); track filiere.id) {
+              <tr>
+                <td>{{ filiere.id }}</td>
+                <td><span class="badge badge-gray">{{ filiere.code }}</span></td>
+                <td>{{ filiere.nom }}</td>
+                <td><span class="badge badge-blue">{{ filiere.cycle }}</span></td>
+                <td>
+                  <button class="btn btn-danger btn-sm" (click)="delete(filiere.id)">Supprimer</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="text-center">Aucune filière trouvée.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </div>
+</div>

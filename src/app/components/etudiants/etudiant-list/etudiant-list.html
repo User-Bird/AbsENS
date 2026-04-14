@@ -1,1 +1,64 @@
-<p>etudiant-list works!</p>
+<div class="page-container">
+  <div class="header-section">
+    <h2>Liste des Étudiants</h2>
+  </div>
+
+  <div class="filters-card">
+    <div class="filter-group">
+      <label>Filière</label>
+      <select [ngModel]="selectedFiliereId()" (ngModelChange)="selectedFiliereId.set($event); onFiliereChange()">
+        <option value="">-- Toutes les filières --</option>
+        @for (f of filiereService.filieres(); track f.id) {
+          <option [value]="f.id">{{ f.nom }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Semestre</label>
+      <select [ngModel]="selectedSemestreId()" (ngModelChange)="selectedSemestreId.set($event); onSemestreChange()" [disabled]="!selectedFiliereId()">
+        <option value="">-- Tous les semestres --</option>
+        @for (s of availableSemestres(); track s.id) {
+          <option [value]="s.id">{{ s.nom }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Groupe</label>
+      <select [ngModel]="selectedGroupe()" (ngModelChange)="selectedGroupe.set($event)" [disabled]="!selectedSemestreId()">
+        <option value="">-- Tous les groupes --</option>
+        @for (g of availableGroupes(); track $index) {
+          <option [value]="g">{{ g }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>CNE</th>
+        <th>Nom complet</th>
+        <th>Email</th>
+        <th>Groupe</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (etudiant of filteredEtudiants(); track etudiant.id) {
+          <tr>
+            <td><span class="badge badge-gray">{{ etudiant.cne }}</span></td>
+            <td><strong>{{ etudiant.nom | uppercase }}</strong> {{ etudiant.prenom }}</td>
+            <td>{{ etudiant.email }}</td>
+            <td><span class="badge badge-blue">{{ etudiant.groupe }}</span></td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="text-center">Aucun étudiant ne correspond à ces critères.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
